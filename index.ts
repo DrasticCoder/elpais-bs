@@ -12,9 +12,11 @@ import type { Article } from './src/types';
 async function main() {
   const articles: Article[] = await scraper('https://elpais.com/');
   console.log(articles);
+
   const spanishTitles = articles.map((a) => a.title);
   const engTitles = await translator(spanishTitles);
   console.log(engTitles)
+  
   const wordFreq = analyser(engTitles);
   console.log(wordFreq);
 }

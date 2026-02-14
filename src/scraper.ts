@@ -17,8 +17,8 @@ const demoArticle = [{
   },
 ];
 
-export default async function scraper(title: string): Promise<Article[]> {
-  console.log('scraperr is called');
+export default async function scraper(url: string): Promise<Article[]> {
+  console.log('scraperr is called',url);
   
   return demoArticle;
 }
