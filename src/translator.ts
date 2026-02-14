@@ -2,8 +2,34 @@
 //input: string[] spanish
 //output:string[] eng
 
-export default function translator(titles: string[]): string[] {
+import axios from 'axios';
+
+export default async function translator(titles: string[]): Promise<string[]> {
   console.log('translator is called');
-  titles = titles.map((t) => t + ' translated');
-  return titles;
+
+  let translatedTitles: string[] = [];
+
+  for (const title of titles) {
+    try {
+      // const encodedTxt = encodeURIComponent(title);
+
+      const resp = await axios.get(
+        'https://ftapi.pythonanywhere.com/translate',
+        {
+          params: {
+            sl: 'es', //source
+            dl: 'en', //destination
+            text: title,
+          },
+        },
+      );
+      const translated = resp.data['destination-text'];
+      translatedTitles.push(translated);
+    } catch (err) {
+      console.error('error translating title:', title, err);
+      translatedTitles.push(title); //falllback
+    }
+  }
+
+  return translatedTitles;
 }

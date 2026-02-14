@@ -1,5 +1,7 @@
-export interface Article {
+export default interface Article {
+  id: number,
   title: string;
   content: string;
   imgUrl?: string;
+  link?: string;
 }
