@@ -8,6 +8,7 @@ import scraper from './src/scraper';
 import analyser from './src/analyser';
 import translator from './src/translator';
 import type Article from './src/types';
+import downloader from './src/downloader';
 
 async function main() {
   const articles: Article[] = await scraper('https://elpais.com/');
@@ -19,8 +20,9 @@ async function main() {
   const engTitles = await translator(spanishTitles);
   console.log(engTitles);
 
-  //   const wordFreq = analyser(engTitles);
-  //   console.log(wordFreq);
+  const wordFreq = analyser(engTitles);
+  console.log(wordFreq);
+  await downloader(articles);
 }
 
 main().catch(console.error);

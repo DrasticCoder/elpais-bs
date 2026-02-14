@@ -6,7 +6,6 @@ import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import type Article from './types';
 import { KEYWORDS } from './mapper';
-import downloader from './downloader';
 
 export default async function scraper(url: string): Promise<Article[]> {
   console.log('scraperr is called', url);
@@ -95,7 +94,6 @@ export default async function scraper(url: string): Promise<Article[]> {
       try {
         const imgEle = await driver.findElement(By.css('figure img'));
         article.imgUrl = await imgEle.getAttribute('src');
-        downloader(article.imgUrl, `article-${article.id}.jpg`);
       } catch {
         console.log(`image not found  for article ${article.id}`);
       }

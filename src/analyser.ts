@@ -17,7 +17,7 @@ export default function analyser(title: string[]): Record<string, number> {
   const repeatWords: Record<string, number> = {};
 
   for (const [word, count] of Object.entries(freq)) {
-    if (count > 2) {
+    if (count > 1) {
       repeatWords[word] = count;
     }
   }

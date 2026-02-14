@@ -1,19 +1,25 @@
 import axios from 'axios';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
+import type Article from './types';
 
-export default async function downloader(url: string, filename: string) {
-  const imgDir = path.resolve(__dirname, '../images');
-
+export default async function downloader(articles: Article[]) {
   //check dir exist& creates
-  if (!fs.existsSync(imgDir)) {
-    fs.mkdirSync(imgDir);
-  }
+  const imgDir = path.resolve(__dirname, '../images');
+  await fs.mkdir(imgDir, { recursive: true });
 
-  const filepath = path.join(imgDir, filename);
+  await Promise.all(
+    articles
+      .filter((a) => a.imgUrl)
+      .map(async (article) => {
+        const filename = `article-${article.id}.jpg`;
+        const filepath = path.join(imgDir, filename);
 
-  const resp = await axios.get(url, { responseType: 'arraybuffer' });
+        const resp = await axios.get(article.imgUrl!, {
+          responseType: 'arraybuffer',
+        });
 
-  fs.writeFileSync(filepath, resp.data);
-  console.log('imgs saved');
+        await fs.writeFile(filepath, resp.data);
+      }),
+  );
 }
