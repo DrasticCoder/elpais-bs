@@ -23,7 +23,7 @@ export default async function getArticle(
       return readyState === 'complete';
     }, 10000);
 
-    await acceptCookies(driver);
+    // await acceptCookies(driver);
 
     let titleText = '';
 
