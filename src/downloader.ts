@@ -2,6 +2,7 @@ import axios from 'axios';
 import { promises as fs } from 'fs';
 import path from 'path';
 import type Article from './types';
+import log from './utils/logger';
 
 export default async function downloader(articles: Article[]) {
   //check dir exist& creates
@@ -12,7 +13,10 @@ export default async function downloader(articles: Article[]) {
     articles
       .filter((a) => a.imgUrl)
       .map(async (article) => {
-        const filename = `article-${article.id}.jpg`;
+        const ext = path.extname(
+          new URL(article.imgUrl!).pathname.toLowerCase() || '.jpg',
+        );
+        const filename = `article-${article.id}${ext}`;
         const filepath = path.join(imgDir, filename);
 
         const resp = await axios.get(article.imgUrl!, {
@@ -20,6 +24,7 @@ export default async function downloader(articles: Article[]) {
         });
 
         await fs.writeFile(filepath, resp.data);
+        log(`img saved: ${filename}`);
       }),
   );
 }

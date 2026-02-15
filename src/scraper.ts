@@ -6,15 +6,26 @@ import { Builder, By, until } from 'selenium-webdriver';
 import chrome from 'selenium-webdriver/chrome';
 import type Article from './types';
 import { KEYWORDS } from './mapper';
+import log from './utils/logger';
 
 export default async function scraper(url: string): Promise<Article[]> {
-  console.log('scraperr is called', url);
+  log(`scraperr is called: ${url}`);
   let articles: Article[] = [];
 
   //init sel driver
+  const options = new chrome.Options();
+
+  options.addArguments(
+    '--headless=new',
+    '--no-sandbox',
+    '--disable-dev-shm-usage',
+    '--disable-gpu',
+    '--window-size=1920,1080',
+  );
+
   const driver = await new Builder()
     .forBrowser('chrome')
-    .setChromeOptions(new chrome.Options())
+    .setChromeOptions(options)
     .build();
 
   try {
@@ -23,33 +34,31 @@ export default async function scraper(url: string): Promise<Article[]> {
     //page load
     await driver.wait(until.titleContains(KEYWORDS.HOMEPAGE_TITTLE), 10000);
     const title = await driver.getTitle();
-    console.log('website loaded', title);
+    log(`website loaded ${title}`);
 
     //accept cookies
     try {
-      const accptBtn = await driver.wait(
-        until.elementLocated(By.css(KEYWORDS.COOKIE_BTN)), //not interactable
-        10000,
-      );
+      const accptBtn = await driver.findElements(By.css(KEYWORDS.COOKIE_BTN)); //not interactable
 
-      await driver.wait(until.elementIsVisible(accptBtn), 5000);
-      await accptBtn.click();
-
-      console.log('cookies accepted');
+      if (accptBtn.length > 0) {
+        await accptBtn[0].click();
+        log('cookies accepted');
+      } else {
+        log('no cookie popup', 'DEBUG');
+      }
     } catch (err) {
-      console.log('no cookie popup');
-      if (err) console.error(err);
+      log('error while handling cookies', 'DEBUG');
     }
 
     //search for optionn
     try {
       const optionLnk = await driver.findElement(By.css(KEYWORDS.OPINION_LINK));
-      await driver.wait(until.elementIsVisible(optionLnk), 5000);
-      optionLnk.click();
+      await optionLnk.click();
+
       await driver.wait(until.urlContains('opinion'), 10000);
-      console.log('on opinion page');
+      log('on opinion page');
     } catch (err) {
-      console.error('error navigating to options page', err);
+      log('error navigating to options page', 'ERROR', err);
     }
 
     //fetch articals
@@ -77,7 +86,7 @@ export default async function scraper(url: string): Promise<Article[]> {
     for (const article of articles) {
       if (!article.link) {
         //todo: scrap link again or throq error
-        console.warn('missing link for id', article.id);
+        log(`missing link for id: ${article.id}`, 'WARN');
         continue;
       }
 
@@ -89,13 +98,14 @@ export default async function scraper(url: string): Promise<Article[]> {
         10000,
       );
       article.title = await titleEle.getText();
+      log(`on article page - ${article.link!}`);
 
       //img
       try {
         const imgEle = await driver.findElement(By.css('figure img'));
         article.imgUrl = await imgEle.getAttribute('src');
       } catch {
-        console.log(`image not found  for article ${article.id}`);
+        log(`image not found  for article ${article.id}`, 'ERROR');
       }
 
       // content
@@ -106,11 +116,11 @@ export default async function scraper(url: string): Promise<Article[]> {
 
         if (contentEle.length == 0) {
           let contentEle = await driver.findElement(
-            By.css(KEYWORDS.ARTICLE_CONTENT_2),
+            By.css(KEYWORDS.FALLBACK_CONTENT_SELECTOR),
           );
           let content = await contentEle.getText();
           article.content = content;
-          console.log('using pattrn 2 for content extraction');
+          log('using pattrn 2 for content extraction', 'DEBUG');
           continue;
         }
 
@@ -121,8 +131,9 @@ export default async function scraper(url: string): Promise<Article[]> {
           }
         }
       } catch (err) {
-        console.error(
+        log(
           `Error fetching article content for id ${article.id}`,
+          'ERROR',
           err,
         );
       }

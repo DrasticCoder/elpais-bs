@@ -3,10 +3,11 @@
 //output:string[] eng
 
 import axios from 'axios';
+import log from './utils/logger';
 
 export default async function translator(titles: string[]): Promise<string[]> {
-  console.log('translator is called');
-
+  log('translator is called');
+  //todo:if need to translate frequenty then add delimit logic
   return Promise.all(
     titles.map(async (title) => {
       try {

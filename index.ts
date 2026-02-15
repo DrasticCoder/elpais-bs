@@ -23,6 +23,7 @@ async function main() {
   const wordFreq = analyser(engTitles);
   console.log(wordFreq);
   await downloader(articles);
+  console.log(articles);
 }
 
 main().catch(console.error);
