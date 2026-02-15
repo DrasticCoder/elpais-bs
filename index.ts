@@ -1,29 +1,15 @@
-//start selenium
-//TODO: 1.call scrapper
-//2. translator
-//3. analyser
-//end selenium
+import dotenv from 'dotenv';
+import log from './src/utils/logger';
+import { runLocal } from './src/runner/local.runner';
+import { runBs } from './src/runner/bs.runner';
 
-import scraper from './src/scraper';
-import analyser from './src/analyser';
-import translator from './src/translator';
-import type Article from './src/types';
-import downloader from './src/downloader';
+const mode = process.argv[2];
+log(`starting run in ${mode} mode`);
 
-async function main() {
-  const articles: Article[] = await scraper('https://elpais.com/');
-  // console.log(articles);
+dotenv.config();
 
-  const spanishTitles = articles.map((a) => a.title);
-  console.log(spanishTitles);
-  console.log();
-  const engTitles = await translator(spanishTitles);
-  console.log(engTitles);
-
-  const wordFreq = analyser(engTitles);
-  console.log(wordFreq);
-  await downloader(articles);
-  console.log(articles);
+if (mode === 'bs') {
+  runBs();
+} else {
+  runLocal();
 }
-
-main().catch(console.error);

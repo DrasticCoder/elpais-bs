@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { promises as fs } from 'fs';
 import path from 'path';
-import type Article from './types';
-import log from './utils/logger';
+import type Article from '../types';
+import log from './logger';
 
 export default async function downloader(articles: Article[]) {
   //check dir exist& creates
-  const imgDir = path.resolve(__dirname, '../images');
+  const imgDir = path.resolve(__dirname, '../../images');
   await fs.mkdir(imgDir, { recursive: true });
 
   await Promise.all(

@@ -3,7 +3,9 @@ export const KEYWORDS = {
   ARTICLE_TITLE: 'h2',
   ARTICLE_IMG: 'header div figure img',
   ARTICLE_LINK: 'header h2 a',
-  COOKIE_BTN: '.pmConsentWall-button', //'#didomi-notice-agree-button',
+  // COOKIE_BTN: '#didomi-notice-agree-button',
+  // COOKIE_BTN:  `button[id*="agree"],button[class*="agree"],button:contains("Aceptar")`
+  // COOKIE_BTN: 'OPINIÓN',
   HOMEPAGE_TITTLE: 'EL PAÍS',
   OPINION_LINK: 'a[href*="opinion"]',
   ARTICLE_CONTENT: '[data-dtm-region="articulo_cuerpo"] p', //articulo_cuerpo means article body

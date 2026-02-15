@@ -2,7 +2,7 @@
 //input: string trasnlated titles
 //return : word freq mapping
 
-import log from './utils/logger';
+import log from './logger';
 
 export default function analyser(title: string[]): Record<string, number> {
   log('analyser is called');
@@ -19,7 +19,7 @@ export default function analyser(title: string[]): Record<string, number> {
   const repeatWords: Record<string, number> = {};
 
   for (const [word, count] of Object.entries(freq)) {
-    if (count > 2) {
+    if (count > 2) { //todo: remove common words- the a of
       repeatWords[word] = count;
     }
   }
