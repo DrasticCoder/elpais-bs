@@ -3,10 +3,14 @@ import chrome from 'selenium-webdriver/chrome';
 import firefox from 'selenium-webdriver/firefox';
 import safari from 'selenium-webdriver/safari';
 import { settings } from '../config/general';
+import { browserStackCaps } from '../config/browserStackCaps';
 
 export async function createLocalDriver() {
   const options = new chrome.Options();
-  // const options = new firefox.Options();
+  // options.setMobileEmulation({
+  //   deviceName: 'Galaxy S8',
+  // });
+  // const options = new firefox.Options(browserStackCaps);
   // const options = new safari.Options();
 
   if (settings.HEADLESS) {
