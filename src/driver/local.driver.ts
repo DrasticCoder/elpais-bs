@@ -7,15 +7,16 @@ import { browserStackCaps } from '../config/browserStackCaps';
 
 export async function createLocalDriver() {
   const options = new chrome.Options();
-  // options.setMobileEmulation({
-  //   deviceName: 'Galaxy S8',
-  // });
-  // const options = new firefox.Options(browserStackCaps);
+  // const options = new firefox.Options();
   // const options = new safari.Options();
+
+  options.setMobileEmulation({
+    deviceName: 'Galaxy S8',
+  });
 
   if (settings.HEADLESS) {
     options.addArguments(
-      '--headless=new',
+      // '--headless=new',
       '--no-sandbox',
       '--disable-dev-shm-usage',
       '--disable-gpu',

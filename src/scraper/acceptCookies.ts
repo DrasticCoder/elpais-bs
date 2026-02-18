@@ -1,5 +1,7 @@
 import { By, WebDriver, until } from 'selenium-webdriver';
 import log from '../utils/logger';
+import { KEYWORDS } from '../config/mapper';
+import isMobile from './isMobile';
 
 export default async function acceptCookies(
   driver: WebDriver,
@@ -12,71 +14,25 @@ export default async function acceptCookies(
       return state === 'complete';
     }, timeout);
 
-    await driver.sleep(2000);
+    await driver.sleep(5000);
 
-    //main dom
-    const clickedMain = await tryClickCookie(driver);
-    if (clickedMain) {
-      log('cookies accepted (main DOM)');
-      return;
+    const mobile = await isMobile(driver);
+
+    if (mobile) {
+    }
+    const cookieEle = await driver.wait(
+      until.elementLocated(By.css(KEYWORDS.COOKIE_BTN)),
+      10000,
+    );
+
+    if (!cookieEle) {
+      log('Error finding cookie btn', 'ERROR');
     }
 
-    // fallback iframes for-didomi
-    const iframes = await driver.findElements(By.css('iframe'));
-    for (const frame of iframes) {
-      try {
-        await driver.switchTo().frame(frame);
+    await cookieEle.click();
+    log('cookies accepted');
 
-        const clickedFrame = await tryClickCookie(driver);
-        if (clickedFrame) {
-          log('cookies accepted (iframe)');
-          await driver.switchTo().defaultContent();
-          return;
-        }
-
-        await driver.switchTo().defaultContent();
-      } catch {
-        await driver.switchTo().defaultContent();
-      }
-    }
-
-    log('cookie popup not found', 'DEBUG');
   } catch (err) {
     log('error while handling cookies', 'DEBUG', err);
   }
-}
-
- // click cookie button js
-async function tryClickCookie(driver: WebDriver): Promise<boolean> {
-  return (await driver.executeScript(() => {
-    const normalize = (str: string | null) => str?.toLowerCase().trim() ?? '';
-
-    const elements = Array.from(
-      document.querySelectorAll('button, a, div'),
-    ) as HTMLElement[];
-
-    const agreeBtn = elements.find((el) => {
-      const id = normalize(el.id);
-      const className = normalize(el.className);
-      const text = normalize(el.textContent);
-
-      return (
-        id.includes('agree') ||
-        id.includes('accept') ||
-        id.includes('didomi') ||
-        className.includes('agree') ||
-        className.includes('accept') ||
-        text.includes('aceptar') ||
-        text.includes('accept') ||
-        text.includes('agree')
-      );
-    });
-
-    if (agreeBtn) {
-      agreeBtn.click();
-      return true;
-    }
-
-    return false;
-  })) as boolean;
 }

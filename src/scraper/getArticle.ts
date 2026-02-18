@@ -37,7 +37,7 @@ export default async function getArticle(
       titleText = await titleEle.getText();
     } catch {
       log(`fallback title selector used for article ${article.id}`, 'DEBUG');
-      const altTitle = await driver.findElement(By.css('title'));
+      const altTitle = await driver.findElement(By.css(KEYWORDS.ARTICLE_TITLE_FALLBACK));
       titleText = await altTitle.getAttribute('textContent');
     }
 
@@ -45,7 +45,7 @@ export default async function getArticle(
 
     //image
     try {
-      const imgEle = await driver.findElement(By.css(KEYWORDS.ARTICLE_IMG));//'figure img'
+      const imgEle = await driver.findElement(By.css(KEYWORDS.ARTICLE_IMG)); //'figure img'
       article.imgUrl = await imgEle.getAttribute('src');
     } catch {
       log(`image not found for article ${article.id}`, 'DEBUG');
@@ -72,7 +72,7 @@ export default async function getArticle(
       for (const paragraph of contentElements) {
         const text = await paragraph.getText();
         if (text.trim()) {
-          content += text + '\n';
+          content += text;
         }
       }
 

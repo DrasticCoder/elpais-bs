@@ -5,13 +5,14 @@ import translator from '../translator';
 import analyser from '../utils/analyser';
 import downloader from '../utils/downloader';
 import getArticle from '../scraper/getArticle';
+import { KEYWORDS } from '../config/mapper';
 export async function runLocal() {
   const homepageDriver = await createLocalDriver();
 
   let articles: Article[];
 
   try {
-    articles = await scraper(homepageDriver, 'https://elpais.com/');
+    articles = await scraper(homepageDriver, KEYWORDS.BASE_WEBSITE);
   } finally {
     await homepageDriver.quit();
   }
@@ -32,8 +33,23 @@ export async function runLocal() {
   const wordFreq = analyser(engTitles);
   await downloader(articles);
 
-  console.log(spanishTitles);
-  console.log(engTitles);
-  console.log(wordFreq);
+  console.log(
+    '=========================[ REPORT starts ]=========================',
+  );
   console.log(articles);
+  console.log(
+    '-------------------------[ Articles Titles ]-------------------------',
+  );
+  console.log(spanishTitles);
+  console.log(
+    '-------------------------[ Articles Titles:Translated ]-------------------------',
+  );
+  console.log(engTitles);
+  console.log(
+    '-------------------------[ Word Freq analysis ]-------------------------',
+  );
+  console.log(wordFreq);
+  console.log(
+    '=========================[ REPORT ends ]=========================',
+  );
 }

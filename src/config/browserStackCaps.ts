@@ -6,7 +6,7 @@ export const browserStackCaps = [
     'bstack:options': {
       os: 'Windows',
       osVersion: '11',
-      buildName: 'DrasticCoder - ElPais',
+      buildName: 'DrasticCoder RUN',
       sessionName: 'Windows Chrome',
     },
   },
@@ -18,7 +18,7 @@ export const browserStackCaps = [
     'bstack:options': {
       os: 'OS X',
       osVersion: 'Ventura',
-      buildName: 'DrasticCoder - ElPais',
+      buildName: 'DrasticCoder RUN',
       sessionName: 'Mac Safari',
     },
   },
@@ -30,20 +30,20 @@ export const browserStackCaps = [
     'bstack:options': {
       os: 'Windows',
       osVersion: '11',
-      buildName: 'DrasticCoder - ElPais',
+      buildName: 'DrasticCoder RUN',
       sessionName: 'Windows Firefox',
     },
   },
 
-  // iPhone 14 //stuck at cookie accept screen
-  {
-    browserName: 'Safari',
-    'bstack:options': {
-      osVersion: '16',
-      deviceName: 'iPhone 14',
-      realMobile: true,
-      buildName: 'DrasticCoder - ElPais',
-      sessionName: 'iPhone 14',
+      // iPhone 14 //stuck at cookie accept screen
+      {
+        browserName: 'Safari',
+        'bstack:options': {
+          osVersion: '26',
+          deviceOrientation: 'portrait',
+      deviceName: 'iPhone 15',
+      buildName: 'DrasticCoder RUN',
+      sessionName: 'iPhone 15',
     },
   },
 
@@ -52,9 +52,9 @@ export const browserStackCaps = [
     browserName: 'Chrome',
     'bstack:options': {
       osVersion: '13.0',
+      deviceOrientation: 'portrait',
       deviceName: 'Samsung Galaxy S23',
-      realMobile: true,
-      buildName: 'DrasticCoder - ElPais',
+      buildName: 'DrasticCoder RUN',
       sessionName: 'Galaxy S23',
     },
   },
