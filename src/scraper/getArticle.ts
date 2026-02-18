@@ -29,7 +29,7 @@ export default async function getArticle(
 
     try {
       const titleEle = await driver.wait(
-        until.elementLocated(By.css('h1')),
+        until.elementLocated(By.css(KEYWORDS.ARTICLE_TITLE)),
         15000,
       );
 
@@ -45,7 +45,7 @@ export default async function getArticle(
 
     //image
     try {
-      const imgEle = await driver.findElement(By.css('figure img'));
+      const imgEle = await driver.findElement(By.css(KEYWORDS.ARTICLE_IMG));//'figure img'
       article.imgUrl = await imgEle.getAttribute('src');
     } catch {
       log(`image not found for article ${article.id}`, 'DEBUG');

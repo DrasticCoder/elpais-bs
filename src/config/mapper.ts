@@ -1,6 +1,6 @@
 export const KEYWORDS = {
   ARTICLE: 'article',
-  ARTICLE_TITLE: 'h2',
+  ARTICLE_TITLE: 'h1',
   ARTICLE_IMG: 'header div figure img',
   ARTICLE_LINK: 'header h2 a',
   // COOKIE_BTN: '#didomi-notice-agree-button',

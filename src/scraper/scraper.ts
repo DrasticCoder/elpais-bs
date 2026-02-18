@@ -23,10 +23,10 @@ export default async function scraper(
     return readyState === 'complete';
   }, 10000);
 
-  await driver.wait(until.titleContains(KEYWORDS.HOMEPAGE_TITTLE), 10000); 
+  await driver.wait(until.titleContains(KEYWORDS.HOMEPAGE_TITTLE), 10000);
   log(`website loaded ${await driver.getTitle()}`);
 
-  // Handle cookies
+  // //Handle cookies
   // try {
   // const buttons = await driver.findElements(By.linkText(KEYWORDS.COOKIE_BTN));//fallback
   // const buttons = await driver.findElements(By.css(KEYWORDS.COOKIE_BTN));
@@ -43,16 +43,16 @@ export default async function scraper(
   await acceptCookies(driver);
 
   // // Navigate to opinion
-  // const optionLnk = await driver.findElement(By.css(KEYWORDS.OPINION_LINK)); //fallback
-  // await optionLnk.click();
-  const optionLnk = await driver.wait(
+  // const opinionLink = await driver.findElement(By.css(KEYWORDS.OPINION_LINK)); //fallback
+  // await opinionLink.click();
+  const opinionLink = await driver.wait(
     until.elementLocated(By.css(KEYWORDS.OPINION_LINK)),
     10000,
   );
 
-  await driver.executeScript('arguments[0].scrollIntoView(true);', optionLnk);
-  await driver.wait(until.elementIsVisible(optionLnk), 5000);
-  await driver.executeScript('arguments[0].click();', optionLnk);
+  await driver.executeScript('arguments[0].scrollIntoView(true);', opinionLink);
+  await driver.wait(until.elementIsVisible(opinionLink), 5000);
+  await driver.executeScript('arguments[0].click();', opinionLink);
   await driver.wait(until.urlContains('opinion'), 10000);
   log('on opinion page');
 
