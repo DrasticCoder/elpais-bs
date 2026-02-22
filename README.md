@@ -72,7 +72,15 @@ npm run local
 
 ```
 
+Or use Docker
+
+```
+docker build -t elpais-scraper .
+docker run --rm elpais-scraper
+```
+
 This will:
+
 - Run in headless Chrome
 - Download article images
 - Print Spanish titles
@@ -90,11 +98,13 @@ npm run bs
 ```
 
 This will:
+
 - Start 5 parallel sessions
 - Run across desktop & mobile browsers
 - Mark session as passed/failed using BrowserStack executor API
 
 Current configured browsers:
+
 - Windows Chrome
 - macOS Safari
 - Windows Firefox
@@ -108,6 +118,7 @@ Note: Some mobile/Firefox sessions may require additional stabilization due to c
 ## Cookie Handling
 
 The script dynamically detects and accepts cookie banners by:
+
 - Scanning visible buttons
 - Matching keywords like "accept", "agree", "aceptar"
 - Handling iframes (Didomi case)

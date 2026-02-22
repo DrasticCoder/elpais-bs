@@ -28,16 +28,15 @@ export default async function getArticle(
     let titleText = '';
 
     try {
-      const titleEle = await driver.wait(
-        until.elementLocated(By.css(KEYWORDS.ARTICLE_TITLE)),
-        15000,
-      );
+      const titleEle = await driver.findElement(By.css(KEYWORDS.ARTICLE_TITLE));
 
-      await driver.wait(until.elementIsVisible(titleEle), 10000);
+      await driver.wait(until.elementIsVisible(titleEle));
       titleText = await titleEle.getText();
     } catch {
       log(`fallback title selector used for article ${article.id}`, 'DEBUG');
-      const altTitle = await driver.findElement(By.css(KEYWORDS.ARTICLE_TITLE_FALLBACK));
+      const altTitle = await driver.findElement(
+        By.css(KEYWORDS.ARTICLE_TITLE_FALLBACK),
+      );
       titleText = await altTitle.getAttribute('textContent');
     }
 

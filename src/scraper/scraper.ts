@@ -1,14 +1,11 @@
-import { By, Key, until, WebDriver } from 'selenium-webdriver';
+import { By, until, WebDriver } from 'selenium-webdriver';
 import Article from '../types';
 import { KEYWORDS } from '../config/mapper';
 import log from '../utils/logger';
 import getArticle from './getArticle';
-import { createLocalDriver } from '../driver/local.driver';
-import { createBsDriver } from '../driver/bs.driver';
-import { browserStackCaps } from '../config/browserStackCaps';
-import { settings } from '../config/general';
 import acceptCookies from './acceptCookies';
 import isMobile from './isMobile';
+import { titleContains } from 'selenium-webdriver/lib/until';
 
 export default async function scraper(
   driver: WebDriver,
@@ -23,7 +20,7 @@ export default async function scraper(
     return readyState === 'complete';
   }, 10000);
 
-  await driver.wait(until.titleContains(KEYWORDS.HOMEPAGE_TITTLE), 10000);
+  await driver.wait(titleContains(KEYWORDS.HOMEPAGE_TITTLE)); //todo:remove intentional reapeating wait
   log(`website loaded ${await driver.getTitle()}`);
 
   await acceptCookies(driver);
@@ -42,7 +39,7 @@ export default async function scraper(
         By.linkText(KEYWORDS.OPINION_BTN_TXT),
       );
 
-      await driver.wait(until.elementIsVisible(opinionEle), 10000);
+      await driver.wait(until.elementIsVisible(opinionEle));
       await opinionEle.click();
       log('navigating to opinion page');
     } catch (error) {
@@ -68,7 +65,7 @@ export default async function scraper(
 
   // Fetch article links
   let articleEles = await driver.findElements(By.css(KEYWORDS.ARTICLE));
-  articleEles = articleEles.slice(0, 5);
+  articleEles = articleEles.slice(0, 5); //if out of range then end defualt to arr
 
   for (let i = 0; i < articleEles.length; i++) {
     const linkEle = await articleEles[i].findElement(

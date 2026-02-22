@@ -33,6 +33,8 @@ export async function runLocal() {
   const wordFreq = analyser(engTitles);
   await downloader(articles);
 
+  // await report(articles,spanishTitles,engTitles,wordFreq)
+
   console.log(
     '=========================[ REPORT starts ]=========================',
   );

@@ -1,7 +1,6 @@
 import { By, WebDriver, until } from 'selenium-webdriver';
 import log from '../utils/logger';
 import { KEYWORDS } from '../config/mapper';
-import isMobile from './isMobile';
 
 export default async function acceptCookies(
   driver: WebDriver,
@@ -15,15 +14,7 @@ export default async function acceptCookies(
     }, timeout);
 
     await driver.sleep(5000);
-
-    const mobile = await isMobile(driver);
-
-    if (mobile) {
-    }
-    const cookieEle = await driver.wait(
-      until.elementLocated(By.css(KEYWORDS.COOKIE_BTN)),
-      10000,
-    );
+    const cookieEle = await driver.findElement(By.css(KEYWORDS.COOKIE_BTN));
 
     if (!cookieEle) {
       log('Error finding cookie btn', 'ERROR');
@@ -31,7 +22,6 @@ export default async function acceptCookies(
 
     await cookieEle.click();
     log('cookies accepted');
-
   } catch (err) {
     log('error while handling cookies', 'DEBUG', err);
   }

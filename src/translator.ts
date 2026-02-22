@@ -17,6 +17,15 @@ export default async function translator(titles: string[]): Promise<string[]> {
             params: { sl: 'es', dl: 'en', text: title },
           },
         );
+
+        if (resp.status != 200) {
+          //use fallback transl api
+          log('using fallback for translation');
+          let resp = await axios.get(`https://lingva.ml/api/v1/es/en/${title}`);
+
+          return resp.data['translation'];
+        }
+
         return resp.data['destination-text'];
       } catch {
         return title;

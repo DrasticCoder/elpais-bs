@@ -9,7 +9,7 @@ export default function analyser(title: string[]): Record<string, number> {
 
   const joinedTitles = title.join(' ').toLowerCase();
   const words = joinedTitles.replace(/[^\w\s]/g, '').split(/\s+/); //todo:check for _
-
+  //^ = not , \w = word , \s =space /g = global quantifier(where tosearch)
   const freq: Record<string, number> = {};
 
   for (const word of words) {
@@ -19,7 +19,8 @@ export default function analyser(title: string[]): Record<string, number> {
   const repeatWords: Record<string, number> = {};
 
   for (const [word, count] of Object.entries(freq)) {
-    if (count > 2) { //todo: remove common words- the a of
+    if (count > 2) {
+      //todo: remove common words- the a of
       repeatWords[word] = count;
     }
   }
